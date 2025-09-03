@@ -1,0 +1,26 @@
+// Add click event listener to the RGB button
+document.querySelector('.rgb-button').addEventListener('click', function (e) {
+  // Redirect to external URL when button is clicked
+  window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+
+  // Create ripple effect element
+  const circle = document.createElement('span');
+  circle.classList.add('ripple');
+
+  // Get button's position and dimensions
+  const rect = this.getBoundingClientRect();
+  // Calculate ripple size based on largest button dimension
+  const size = Math.max(rect.width, rect.height);
+  circle.style.width = circle.style.height = `${size}px`;
+
+  // Position the ripple at the click coordinates
+  // Center the ripple on the click point
+  circle.style.left = `${e.clientX - rect.left - size / 2}px`;
+  circle.style.top = `${e.clientY - rect.top - size / 2}px`;
+
+  // Add ripple to button
+  this.appendChild(circle);
+
+  // Remove ripple after animation completes (600ms)
+  setTimeout(() => circle.remove(), 600);
+});

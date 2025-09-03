@@ -1,22 +1,116 @@
-body{
- display: flex;
- justify-content: center;
- align-items: center;
- height: 100vh;
- background: #111;
+:root {
+  --button-bg: #000;          /* Main button background color */
+  --button-text: #fff;        /* Button text color */
+  --button-overlay: #111;     /* Dark overlay to create depth effect */
+  --border-radius: 8px;       /* Button border radius */
 }
 
+/* Body styling - centers the button on the page */
+body {
+  background: #111;           /* Dark background */
+  display: flex;              /* Flexbox for centering */
+  justify-content: center;    /* Center horizontally */
+  align-items: center;        /* Center vertically */
+  height: 100vh;              /* Full viewport height */
+  margin: 0;                  /* Remove default margin */
+}
+
+/* Main RGB button styling */
 .rgb-button {
-  padding: 15px 30px;
-  font-size: 18px;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(45deg, red, green, blue);
-  transition: transform 0.2s;
+  position: relative;         /* Enable pseudo-elements positioning */
+  padding: 15px 40px;         /* Internal spacing */
+  font-size: 18px;            /* Text size */
+  color: var(--button-text);  /* Text color from CSS variable */
+  background: var(--button-bg); /* Background color */
+  border: none;               /* Remove default button border */
+  cursor: pointer;            /* Show pointer cursor on hover */
+  overflow: hidden;           /* Hide overflow for ripple effect */
+  z-index: 1;                 /* Layer above pseudo-elements */
+  border-radius: var(--border-radius); /* Rounded corners */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth animations */
+  text-decoration: none;      /* Remove any text decoration */
+  display: inline-flex;       /* Flex layout for icon + text */
+  align-items: center;        /* Center content vertically */
+  justify-content: center;    /* Center content horizontally */
 }
 
+/* Button hover state - slight scale up with glow */
 .rgb-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);     /* Slightly enlarge button */
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); /* White glow effect */
+}
+
+/* Button active state - scale down for click feedback */
+.rgb-button:active {
+  transform: scale(0.95);     /* Slightly shrink button */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Reduced glow */
+}
+
+/* Animated RGB border effect using ::before pseudo-element */
+.rgb-button::before {
+  content: '';                /* Empty content for pseudo-element */
+  position: absolute;         /* Position relative to button */
+  top: -2px;                  /* Extend beyond button edges */
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  /* Rainbow gradient that animates */
+  background: linear-gradient(45deg,
+    red, orange, yellow, green, cyan, blue, violet, red);
+  z-index: -2;                /* Behind button content */
+  background-size: 400%;      /* Large size for smooth animation */
+  filter: blur(8px);          /* Blur effect for glow */
+  animation: rgb-glow 10s linear infinite; /* Continuous animation */
+  border-radius: calc(var(--border-radius) + 2px); /* Slightly larger radius */
+}
+
+/* Dark overlay to create button depth using ::after pseudo-element */
+.rgb-button::after {
+  content: '';                /* Empty content for pseudo-element */
+  position: absolute;         /* Position relative to button */
+  top: 2px;                   /* Inset from button edges */
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: var(--button-overlay); /* Dark overlay color */
+  z-index: -1;                /* Behind button content, above RGB border */
+  border-radius: calc(var(--border-radius) - 2px); /* Smaller radius */
+}
+
+/* Icon styling within the button */
+.rgb-button .icon {
+  margin-right: 8px;          /* Space between icon and text */
+  vertical-align: middle;     /* Align icon with text baseline */
+}
+
+/* Ripple effect styling for click animation */
+.rgb-button .ripple {
+  position: absolute;         /* Position relative to button */
+  border-radius: 50%;         /* Perfect circle */
+  transform: scale(0);        /* Start invisible */
+  animation: ripple 0.6s linear; /* Ripple animation */
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+  pointer-events: none;       /* Don't interfere with button clicks */
+  z-index: 0;                 /* Above button background, below text */
+}
+
+/* RGB border animation - shifts gradient position */
+@keyframes rgb-glow {
+  0% {
+    background-position: 0% 50%;    /* Start position */
+  }
+  50% {
+    background-position: 100% 50%;  /* Middle position */
+  }
+  100% {
+    background-position: 0% 50%;    /* End position (loops) */
+  }
+}
+
+/* Ripple effect animation - expands and fades out */
+@keyframes ripple {
+  to {
+    transform: scale(4);        /* Expand to 4x size */
+    opacity: 0;                 /* Fade out completely */
+  }
 }
